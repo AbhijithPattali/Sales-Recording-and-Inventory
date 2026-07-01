@@ -1,0 +1,678 @@
+/* ==========================================================================
+   DESIGN TOKENS
+   ========================================================================== */
+/* Centralize common values here so future visual changes stay predictable
+   and require fewer edits across the stylesheet. */
+
+:root {
+  --color-bg: #f4f6f8;
+  --color-surface: #ffffff;
+  --color-text: #1f2937;
+  --color-text-strong: #111827;
+  --color-text-muted: #6b7280;
+
+  --color-border: #d1d5db;
+  --color-border-strong: #9ca3af;
+
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-primary-ring: rgba(37, 99, 235, 0.12);
+  --color-primary-soft: rgba(37, 99, 235, 0.08);
+  --color-primary-soft-border: rgba(37, 99, 235, 0.24);
+
+  --color-secondary-bg: #f3f4f6;
+  --color-secondary-bg-hover: #e5e7eb;
+
+  --color-danger-bg: #fff1f2;
+  --color-danger-bg-hover: #ffe4e6;
+  --color-danger-border: #fecaca;
+  --color-danger-border-hover: #fda4af;
+
+  --color-danger-solid: #d94b5a;
+  --color-danger-solid-hover: #eb6a77;
+
+  --color-readonly-bg: #f9fafb;
+  --color-readonly-text: #374151;
+
+  --color-surface-glass: rgba(255, 255, 255, 0.72);
+  --color-surface-glass-strong: rgba(255, 255, 255, 0.82);
+  --color-glass-border: rgba(255, 255, 255, 0.45);
+  --color-page-overlay: rgba(244, 246, 248, 0.38);
+  --blur-glass: 16px;
+
+  --shadow-form: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+
+  --field-height: 52px;
+  --touch-target-min: 48px;
+  --form-max-width: 750px;
+  --nav-width: 240px;
+  --app-max-width: 1120px;
+
+  --font-base: 1rem;
+  --line-height-base: 1.5;
+  --transition-fast: 0.2s ease;
+}
+
+/* ==========================================================================
+   BASE RESET
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body,
+h1,
+h2,
+p,
+fieldset,
+legend {
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  font-size: var(--font-base);
+  line-height: var(--line-height-base);
+  background:
+    linear-gradient(var(--color-page-overlay), var(--color-page-overlay)),
+    url("../assets/images/bg-inventory_2_.webp") center / cover no-repeat fixed;
+  color: var(--color-text);
+  padding: var(--space-4);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+/* ==========================================================================
+   ACCESSIBILITY UTILITIES
+   ========================================================================== */
+/* Use this class for content that should remain available to assistive
+   technology while staying visually hidden on screen. */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+}
+
+.form-help {
+  display: block;
+  margin-top: var(--space-2);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   APP LAYOUT
+   ========================================================================== */
+/* The page uses a two-column shell on larger screens: a smaller navigation
+   card on the left and the main sales card on the right. */
+
+.app-shell {
+  display: grid;
+  grid-template-columns: var(--nav-width) minmax(0, 1fr);
+  gap: var(--space-8);
+  max-width: var(--app-max-width);
+  margin: 0 auto;
+  align-items: start;
+}
+
+.container {
+  max-width: var(--form-max-width);
+  width: 100%;
+  margin: 0;
+}
+
+.sales-form {
+  background: var(--color-surface-glass-strong);
+  padding: var(--space-5);
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-form);
+  -webkit-backdrop-filter: blur(var(--blur-glass));
+  backdrop-filter: blur(var(--blur-glass));
+}
+
+/* ==========================================================================
+   LEFT NAVIGATION PANEL
+   ========================================================================== */
+/* This panel should feel visually related to the sales form without competing
+   with it. The card styling matches the main form, but the footprint stays
+   smaller and more utility-focused. */
+
+.nav-panel {
+  position: sticky;
+  top: var(--space-4);
+}
+
+.nav-panel__inner {
+  background: var(--color-surface-glass);
+  padding: var(--space-5);
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-form);
+  -webkit-backdrop-filter: blur(var(--blur-glass));
+  backdrop-filter: blur(var(--blur-glass));
+}
+
+.nav-panel__title {
+  margin-bottom: var(--space-4);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text-strong);
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.nav-button {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  min-height: var(--field-height);
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-strong);
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: left;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.nav-button:hover {
+  background: var(--color-secondary-bg);
+  border-color: var(--color-border-strong);
+}
+
+.nav-button:active {
+  transform: scale(0.99);
+}
+
+.nav-button--active {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary-soft-border);
+  color: var(--color-primary);
+}
+
+/* ==========================================================================
+   FORM HEADER
+   ========================================================================== */
+
+.form-header {
+  margin-bottom: var(--space-6);
+  text-align: center;
+}
+
+.form-header h1 {
+  margin-bottom: var(--space-1);
+  font-size: 2rem;
+  color: var(--color-text-strong);
+}
+
+.form-header p {
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   FORM STRUCTURE
+   ========================================================================== */
+
+.form-group {
+  margin-bottom: var(--space-4);
+}
+
+fieldset.form-group,
+.form-group fieldset {
+  min-width: 0;
+  padding: 0;
+  margin: 0 0 var(--space-4);
+  border: 0;
+}
+
+fieldset.form-group legend,
+.form-group legend {
+  margin-bottom: var(--space-2);
+  font-weight: 600;
+  color: var(--color-text-strong);
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-weight: 600;
+  color: var(--color-text-strong);
+}
+
+.form-row {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.form-row .form-group {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ==========================================================================
+   INPUTS
+   ========================================================================== */
+/* Keep selectors simple and explicit so text-like inputs share one visual
+   system without affecting checkboxes. */
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="datetime-local"] {
+  width: 100%;
+  min-height: var(--field-height);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--color-text);
+  font-size: 1rem;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.form-group input[type="text"]::placeholder,
+.form-group input[type="number"]::placeholder,
+.form-group input[type="datetime-local"]::placeholder {
+  color: var(--color-text-muted);
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="number"]:focus,
+.form-group input[type="datetime-local"]:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-ring);
+}
+
+.form-group input[readonly] {
+  background: var(--color-readonly-bg);
+  color: var(--color-readonly-text);
+  cursor: default;
+}
+
+/* ==========================================================================
+   ITEM ROWS
+   ========================================================================== */
+
+#itemsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.item-input {
+  flex: 1.8;
+  min-width: 0;
+}
+
+.quantity-input {
+  flex: 0.45;
+  min-width: 0;
+}
+
+.price-input {
+  flex: 0.75;
+  min-width: 0;
+}
+
+/* ==========================================================================
+   CHECKBOXES
+   ========================================================================== */
+
+.checkbox-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin: var(--space-4) 0 var(--space-6);
+}
+
+.checkbox-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 600;
+  color: var(--color-text-strong);
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: auto;
+  height: auto;
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+
+button {
+  min-height: var(--touch-target-min);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast),
+    opacity var(--transition-fast),
+    color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.primary-btn,
+.secondary-btn {
+  width: 100%;
+  padding: var(--space-4);
+}
+
+.primary-btn {
+  border: 0;
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+.primary-btn:hover {
+  background: var(--color-primary-hover);
+}
+
+.secondary-btn {
+  margin-top: var(--space-3);
+  border: 1px solid var(--color-border);
+  background: var(--color-secondary-bg);
+  color: var(--color-text-strong);
+}
+
+.secondary-btn:hover {
+  background: var(--color-secondary-bg-hover);
+}
+
+.form-actions {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.form-actions .primary-btn {
+  flex: 1;
+  width: auto;
+  margin: 0;
+}
+
+.clear-btn {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: fit-content;
+  padding: 0 var(--space-5);
+  border: 0;
+  background: var(--color-danger-solid);
+  color: #ffffff;
+}
+
+.clear-btn:hover {
+  background: var(--color-danger-solid-hover);
+}
+
+.clear-btn:active {
+  transform: scale(0.98);
+}
+
+.remove-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--field-height);
+  min-width: var(--field-height);
+  height: var(--field-height);
+  padding: 0;
+  border: 1px solid var(--color-danger-border);
+  border-radius: var(--radius-md);
+  background: var(--color-danger-bg);
+}
+
+.remove-btn:hover {
+  background: var(--color-danger-bg-hover);
+  border-color: var(--color-danger-border-hover);
+}
+
+.remove-btn:active {
+  transform: scale(0.97);
+}
+
+.remove-btn:disabled {
+  background: var(--color-secondary-bg);
+  border-color: var(--color-border);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.remove-btn:disabled:hover {
+  background: var(--color-secondary-bg);
+  border-color: var(--color-border);
+}
+
+.trash-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   FOCUS STATES
+   ========================================================================== */
+/* Keep focus styles visible and consistent for keyboard users. */
+
+button:focus-visible,
+.form-group input[type="text"]:focus-visible,
+.form-group input[type="number"]:focus-visible,
+.form-group input[type="datetime-local"]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+@supports not (
+  (-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))
+) {
+  .sales-form {
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  .nav-panel__inner {
+    background: rgba(255, 255, 255, 0.88);
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE ENHANCEMENTS
+   ========================================================================== */
+/* On smaller screens, the sidebar should stack above the form instead of
+   squeezing the content area. This keeps touch targets and form fields more
+   comfortable to use. */
+
+@media (max-width: 960px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+
+  .nav-panel {
+    position: static;
+  }
+
+  .nav-panel__inner {
+    padding: var(--space-4);
+  }
+
+  .nav-menu {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+
+  .nav-button {
+    justify-content: center;
+    text-align: center;
+    padding: 0.85rem 0.75rem;
+  }
+
+  .container {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  body {
+    padding: var(--space-3);
+  }
+
+  .sales-form,
+  .nav-panel__inner {
+    padding: var(--space-4);
+  }
+
+  .form-header {
+    margin-bottom: var(--space-5);
+  }
+
+  .form-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .form-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .item-row {
+    display: grid;
+    grid-template-columns: 0.8fr 1fr 52px;
+    gap: var(--space-3);
+    align-items: end;
+  }
+
+  .item-input {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .quantity-input,
+  .price-input {
+    width: 100%;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions .primary-btn,
+  .form-actions .clear-btn {
+    width: 100%;
+  }
+
+  .remove-btn {
+    width: 52px;
+    min-width: 52px;
+  }
+
+  .nav-menu {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+
+  .nav-button {
+    justify-content: center;
+    text-align: center;
+    padding: 0.85rem 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  .nav-panel__title {
+    margin-bottom: var(--space-3);
+    text-align: center;
+  }
+
+  .checkbox-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .primary-btn,
+  .secondary-btn {
+    padding: 0.95rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sales-form,
+  .nav-panel__inner {
+    border-radius: var(--radius-md);
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="number"],
+  .form-group input[type="datetime-local"],
+  .remove-btn,
+  .primary-btn,
+  .secondary-btn,
+  .nav-button {
+    min-height: 50px;
+  }
+}
