@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const quantityMinimum = 1;
   const salesDraftStorageKey = "gps-sales-draft";
   const appsScriptUrl =
-    "https://script.google.com/macros/s/AKfycbzl7vwPb3SeQ7_QHvnjt_HwS8wkO5khV6wzUeAj63NRMwbztfCW1U8lEC0BoTCah3OX/exec";
+    "https://script.google.com/macros/s/AKfycbxtFwsccPW7GckQ34ZEaYohKcJtfuGqAhm84MLDUM_lxd50M7amGVNEZZRV6bAg2tag/exec";
 
   let inventoryData = [];
   let inventoryItemNames = [];
