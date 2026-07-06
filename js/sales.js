@@ -20,6 +20,9 @@ import {
   isValidInventoryItemName,
 } from "./inventory.js";
 
+import { loadSalesReport } from "./sales-report.js";
+import { loadInventoryReport } from "./inventory-report.js";
+
 function setDefaultSaleDateTime() {
   if (!dom.dateTimeInput || dom.dateTimeInput.value) {
     return;
@@ -610,6 +613,10 @@ async function handleSalesSubmit(event) {
     }
 
     showAlert("Sale saved successfully.");
+
+    await loadSalesReport({ showLoadingState: false, forceRefresh: true });
+    await loadInventoryReport({ showLoadingState: false, forceRefresh: true });
+
     clearSalesDraft();
     resetSalesForm();
   } catch (error) {

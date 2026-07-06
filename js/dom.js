@@ -30,7 +30,7 @@ export const dom = {
   inventoryForm: null,
   inventoryItemNameInput: null,
   inventoryItemSuggestions: null,
-  inventoryModelInput: null,
+  inventoryCategoryInput: null,
   inventoryCurrentStockInput: null,
   inventoryQuantityAddedInput: null,
   inventoryRemarkInput: null,
@@ -79,7 +79,7 @@ export function initializeDom() {
   dom.inventoryItemSuggestions = document.getElementById(
     "inventoryItemSuggestions",
   );
-  dom.inventoryModelInput = document.getElementById("inventoryModel");
+  dom.inventoryCategoryInput = document.getElementById("inventoryCategory");
   dom.inventoryCurrentStockInput = document.getElementById(
     "inventoryCurrentStock",
   );

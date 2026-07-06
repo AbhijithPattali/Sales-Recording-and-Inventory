@@ -1,7 +1,7 @@
 //constants like VAT rate, Apps Script URL, decimal precision.
 
 export const APPS_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbwHTM2nOUzjw4AXzrG0znjuP2myw2bYxG0gFdtWZ1uOC7JA_lWqEDRrK0hTskOAOQ8A/exec";
+  "https://script.google.com/macros/s/AKfycbwLwcUEeLv4ZrILcvr5W8uWse0-NFWEE9XKY6sHYwOqCzH-Qhp4oCjd9ECY-deXYVYn/exec";
 
 export const VAT_RATE = 0.05;
 export const CURRENCY_DECIMALS = 3;

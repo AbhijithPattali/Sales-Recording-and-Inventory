@@ -152,7 +152,7 @@ function closeInventorySuggestions() {
 function syncInventoryFieldsFromItemName() {
   if (
     !dom.inventoryItemNameInput ||
-    !dom.inventoryModelInput ||
+    !dom.inventoryCategoryInput ||
     !dom.inventoryCurrentStockInput
   ) {
     return;
@@ -161,7 +161,7 @@ function syncInventoryFieldsFromItemName() {
   const itemName = String(dom.inventoryItemNameInput.value).trim();
 
   if (!itemName) {
-    dom.inventoryModelInput.value = "";
+    dom.inventoryCategoryInput.value = "";
     dom.inventoryCurrentStockInput.value = "";
     return;
   }
@@ -169,14 +169,14 @@ function syncInventoryFieldsFromItemName() {
   const matches = getInventoryMatchesByItemName(itemName);
 
   if (!matches.length) {
-    dom.inventoryModelInput.value = "";
+    dom.inventoryCategoryInput.value = "";
     dom.inventoryCurrentStockInput.value = "0";
     return;
   }
 
   const firstMatch = matches[0];
-  dom.inventoryModelInput.value = String(
-    firstMatch["Model Number"] || "",
+  dom.inventoryCategoryInput.value = String(
+    firstMatch["Category"] || "",
   ).trim();
   dom.inventoryCurrentStockInput.value = String(
     firstMatch["Total Stock"] ?? "",
@@ -198,7 +198,7 @@ function selectInventorySuggestion(value) {
 function collectInventoryDraft() {
   return {
     itemName: dom.inventoryItemNameInput?.value || "",
-    model: dom.inventoryModelInput?.value || "",
+    category: dom.inventoryCategoryInput?.value || "",
     currentStock: dom.inventoryCurrentStockInput?.value || "",
     quantityAdded: dom.inventoryQuantityAddedInput?.value || "",
     remark: dom.inventoryRemarkInput?.value || "",
@@ -220,8 +220,8 @@ function restoreInventoryForm() {
     dom.inventoryItemNameInput.value = draft.itemName || "";
   }
 
-  if (dom.inventoryModelInput) {
-    dom.inventoryModelInput.value = draft.model || "";
+  if (dom.inventoryCategoryInput) {
+    dom.inventoryCategoryInput.value = draft.category || "";
   }
 
   if (dom.inventoryCurrentStockInput) {
@@ -334,8 +334,8 @@ function handleInventoryClear() {
     dom.inventoryItemNameInput.setCustomValidity("");
   }
 
-  if (dom.inventoryModelInput) {
-    dom.inventoryModelInput.value = "";
+  if (dom.inventoryCategoryInput) {
+    dom.inventoryCategoryInput.value = "";
   }
 
   if (dom.inventoryCurrentStockInput) {
@@ -366,7 +366,7 @@ async function handleInventorySubmit(event) {
   }
 
   const itemName = String(dom.inventoryItemNameInput?.value || "").trim();
-  const category = String(dom.inventoryModelInput?.value || "").trim();
+  const category = String(dom.inventoryCategoryInput?.value || "").trim();
   const quantityAdded = parseFloat(dom.inventoryQuantityAddedInput?.value || 0);
   const remark = String(dom.inventoryRemarkInput?.value || "").trim();
   const staffName = String(dom.inventoryStaffNameInput?.value || "").trim();
@@ -407,8 +407,7 @@ async function handleInventorySubmit(event) {
 
     showAlert("Inventory saved successfully.");
     handleInventoryClear();
-    await loadInventorySuggestions();
-    renderInventoryReportTable();
+    await loadInventorySuggestions({ forceRefresh: true });
   } catch (error) {
     console.error("Inventory submit error:", error);
     showAlert(`Failed to save inventory: ${error.message}`);
@@ -474,7 +473,7 @@ export function initializeInventory() {
     handleInventoryItemClick,
   );
 
-  dom.inventoryModelInput?.addEventListener("input", persistInventoryDraft);
+  dom.inventoryCategoryInput?.addEventListener("input", persistInventoryDraft);
   dom.inventoryQuantityAddedInput?.addEventListener(
     "input",
     persistInventoryDraft,

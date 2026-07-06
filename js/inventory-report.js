@@ -60,7 +60,7 @@ export function renderInventoryReportTable() {
     const itemName = String(item["Item Name"] ?? "")
       .trim()
       .toLowerCase();
-    const model = String(item["Model Number"] ?? "")
+    const category = String(item["Category"] ?? "")
       .trim()
       .toLowerCase();
     const serialNumber = String(item["Serial No"] ?? "")
@@ -70,7 +70,7 @@ export function renderInventoryReportTable() {
       .trim()
       .toLowerCase();
 
-    const searchableText = [itemName, model, serialNumber, remark]
+    const searchableText = [itemName, category, serialNumber, remark]
       .filter(Boolean)
       .join(" ");
 
@@ -94,7 +94,7 @@ export function renderInventoryReportTable() {
     .map((item) => {
       const serialNumber = escapeHtml(item["Serial No"] ?? "");
       const itemName = escapeHtml(item["Item Name"] ?? "");
-      const model = escapeHtml(item["Model Number"] ?? "");
+      const category = escapeHtml(item["Category"] ?? "");
       const stockRaw = item["Total Stock"];
       const currentStock = escapeHtml(stockRaw ?? "");
       const remark = escapeHtml(item["Remark"] ?? "");
@@ -112,7 +112,7 @@ export function renderInventoryReportTable() {
         <tr class="${rowClass}">
           <td>${serialNumber}</td>
           <td>${itemName}</td>
-          <td>${model}</td>
+          <td>${category}</td>
           <td>${currentStock}</td>
           <td>${remark}</td>
         </tr>
