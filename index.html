@@ -24,12 +24,41 @@
           <h2 id="nav-panel-title" class="nav-panel__title">Forms</h2>
 
           <nav class="nav-menu" aria-label="Primary navigation">
-            <button type="button" class="nav-button nav-button--active">
+            <button
+              type="button"
+              class="nav-button nav-button--active"
+              data-view="sales"
+              aria-pressed="true"
+            >
               Sales
             </button>
-            <button type="button" class="nav-button">Inventory</button>
-            <button type="button" class="nav-button">Sales Report</button>
-            <button type="button" class="nav-button">Inventory Report</button>
+
+            <button
+              type="button"
+              class="nav-button"
+              data-view="inventory"
+              aria-pressed="false"
+            >
+              Inventory
+            </button>
+
+            <button
+              type="button"
+              class="nav-button"
+              data-view="sales-report"
+              aria-pressed="false"
+            >
+              Sales Report
+            </button>
+
+            <button
+              type="button"
+              class="nav-button"
+              data-view="inventory-report"
+              aria-pressed="false"
+            >
+              Inventory Report
+            </button>
           </nav>
         </div>
       </aside>
@@ -37,150 +66,394 @@
 
       <!-- Main content -->
       <main class="container">
-        <form class="sales-form">
-          <!-- ===============================================================
-               FORM HEADER
-               App title and page context.
-               =============================================================== -->
-          <header class="form-header">
-            <h1>GPS MUSCAT</h1>
-            <p>Sales Tracker</p>
-          </header>
+        <section class="app-view app-view--active" id="sales-view">
+          <form class="sales-form">
+            <!-- ===============================================================
+       FORM HEADER
+       App title and page context.
+       =============================================================== -->
+            <header class="form-header">
+              <h1>GPS MUSCAT</h1>
+              <p>Sales</p>
+            </header>
 
-          <!-- ===============================================================
-               CUSTOMER DETAILS
-               Customer name for the current sales record.
-               =============================================================== -->
-          <section aria-labelledby="customer-details-heading">
-            <h2 id="customer-details-heading" class="sr-only">
-              Customer details
-            </h2>
+            <!-- ===============================================================
+                CUSTOMER DETAILS
+                Customer name for the current sales record.
+                =============================================================== -->
+            <section aria-labelledby="customer-details-heading">
+              <h2 id="customer-details-heading" class="sr-only">
+                Customer details
+              </h2>
 
-            <div class="form-group">
-              <label for="customerName">Customer Name</label>
-              <input
-                type="text"
-                id="customerName"
-                name="customerName"
-                placeholder="Enter customer name"
-                required
-              />
-            </div>
-          </section>
-
-          <!-- ===============================================================
-               ITEM ENTRY
-               Dynamic sales item rows are inserted into the container by JS.
-               =============================================================== -->
-          <fieldset class="form-group">
-            <legend>Items</legend>
-
-            <div id="itemsContainer"></div>
-
-            <button type="button" id="addItemBtn" class="secondary-btn">
-              + Add Item
-            </button>
-          </fieldset>
-
-          <!-- ===============================================================
-               PRICING SUMMARY
-               Subtotal and total are calculated automatically in JavaScript.
-               =============================================================== -->
-          <section aria-labelledby="pricing-heading">
-            <h2 id="pricing-heading" class="sr-only">Pricing summary</h2>
-
-            <div class="form-row totals-row">
               <div class="form-group">
-                <label for="subtotalPrice">Subtotal (OMR)</label>
+                <label for="customerName">Customer Name</label>
                 <input
                   type="text"
-                  id="subtotalPrice"
-                  name="subtotalPrice"
-                  placeholder="0.000"
-                  readonly
-                  aria-describedby="subtotalHelp"
+                  id="customerName"
+                  name="customerName"
+                  placeholder="Enter customer name"
+                  required
                 />
-                <small id="subtotalHelp" class="form-help">
-                  Calculated automatically. Before VAT.
-                </small>
+              </div>
+            </section>
+
+            <!-- ===============================================================
+                ITEM ENTRY
+                Dynamic sales item rows are inserted into the container by JS.
+                =============================================================== -->
+            <fieldset class="form-group">
+              <legend>Items</legend>
+
+              <div id="itemsContainer"></div>
+
+              <button type="button" id="addItemBtn" class="secondary-btn">
+                + Add Item
+              </button>
+            </fieldset>
+
+            <!-- ===============================================================
+                PRICING SUMMARY
+                Total is calculated automatically in JavaScript.
+                =============================================================== -->
+            <section aria-labelledby="pricing-heading">
+              <h2 id="pricing-heading" class="sr-only">Pricing summary</h2>
+
+              <div class="form-row totals-row">
+                <div class="form-group">
+                  <label for="totalPrice">Total (OMR)</label>
+                  <input
+                    type="text"
+                    id="totalPrice"
+                    name="totalPrice"
+                    placeholder="0.000"
+                    readonly
+                    aria-describedby="totalHelp"
+                  />
+                  <small id="totalHelp" class="form-help">
+                    Calculated automatically. With VAT if applicable.
+                  </small>
+                </div>
+              </div>
+            </section>
+
+            <!-- ===============================================================
+                SALE TIMING
+                Editable date and time field for the current sale.
+                =============================================================== -->
+            <section aria-labelledby="sale-details-heading">
+              <h2 id="sale-details-heading" class="sr-only">Sale details</h2>
+
+              <div class="form-group">
+                <label for="saleDateTime">Date and Time</label>
+                <input
+                  type="datetime-local"
+                  id="saleDateTime"
+                  name="saleDateTime"
+                />
+              </div>
+            </section>
+
+            <!-- ===============================================================
+                SALE OPTIONS
+                VAT and payment status flags for the current sale.
+                =============================================================== -->
+            <fieldset class="form-group">
+              <legend>Sale Options</legend>
+
+              <div class="checkbox-row">
+                <label class="checkbox-group" for="vat">
+                  <input type="checkbox" id="vat" name="vat" />
+                  <span>VAT 5%</span>
+                </label>
+
+                <label class="checkbox-group" for="paid">
+                  <input type="checkbox" id="paid" name="paid" />
+                  <span>Paid</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <!-- ===============================================================
+                FORM ACTIONS
+                Save and reset controls for the sales form.
+                =============================================================== -->
+            <div class="form-actions">
+              <button type="submit" class="primary-btn form-actions__save">
+                Save Sales Record
+              </button>
+              <button type="button" id="clearFormBtn" class="clear-btn">
+                Clear
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <section class="app-view" id="inventory-view" hidden>
+          <form class="page-panel inventory-form" id="inventoryForm">
+            <header class="form-header">
+              <h1>GPS MUSCAT</h1>
+              <p>Inventory</p>
+            </header>
+
+            <section aria-labelledby="inventory-item-heading">
+              <h2 id="inventory-item-heading" class="sr-only">
+                Inventory item details
+              </h2>
+
+              <div class="form-group">
+                <label for="inventoryItemName">Item Name</label>
+
+                <div class="item-autocomplete">
+                  <input
+                    type="text"
+                    id="inventoryItemName"
+                    name="inventoryItemName"
+                    class="inventory-item-input"
+                    placeholder="Enter item name"
+                    autocomplete="off"
+                    required
+                  />
+                  <div
+                    class="item-suggestions"
+                    id="inventoryItemSuggestions"
+                    hidden
+                  ></div>
+                </div>
               </div>
 
               <div class="form-group">
-                <label for="totalPrice">Total (OMR)</label>
+                <label for="inventoryModel">Model</label>
                 <input
                   type="text"
-                  id="totalPrice"
-                  name="totalPrice"
-                  placeholder="0.000"
-                  readonly
-                  aria-describedby="totalHelp"
+                  id="inventoryModel"
+                  name="inventoryModel"
+                  placeholder="Enter model"
+                  autocomplete="off"
+                  required
                 />
-                <small id="totalHelp" class="form-help">
-                  Calculated automatically. With VAT if applicable.
-                </small>
               </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="inventoryCurrentStock">Current Stock</label>
+                  <input
+                    type="number"
+                    id="inventoryCurrentStock"
+                    name="inventoryCurrentStock"
+                    placeholder="0"
+                    readonly
+                  />
+                  <small class="form-help">
+                    Auto-filled when the item already exists.
+                  </small>
+                </div>
+
+                <div class="form-group">
+                  <label for="inventoryQuantityAdded">Add Stock</label>
+                  <input
+                    type="number"
+                    id="inventoryQuantityAdded"
+                    name="inventoryQuantityAdded"
+                    placeholder="Enter stock to add"
+                    min="1"
+                    step="1"
+                    required
+                  />
+                  <small class="form-help">
+                    Enter the quantity to add for this item.
+                  </small>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="inventoryRemark">Remark</label>
+                <textarea
+                  id="inventoryRemark"
+                  name="inventoryRemark"
+                  rows="4"
+                  maxlength="500"
+                  placeholder="Add remark"
+                ></textarea>
+                <small class="form-help">Keep remark short and clear.</small>
+              </div>
+
+              <div class="form-group">
+                <label for="inventoryStaffName">Updated By</label>
+                <input
+                  type="text"
+                  id="inventoryStaffName"
+                  name="inventoryStaffName"
+                  placeholder="Staff Name"
+                  autocomplete="name"
+                  required
+                />
+              </div>
+            </section>
+
+            <div class="form-actions">
+              <button type="submit" class="primary-btn form-actions__save">
+                Save Inventory Record
+              </button>
+              <button type="button" id="clearInventoryBtn" class="clear-btn">
+                Clear
+              </button>
             </div>
-          </section>
+          </form>
+        </section>
 
-          <!-- ===============================================================
-               SALE TIMING
-               Editable date and time field for the current sale.
-               =============================================================== -->
-          <section aria-labelledby="sale-details-heading">
-            <h2 id="sale-details-heading" class="sr-only">Sale details</h2>
+        <section class="app-view" id="sales-report-view" hidden>
+          <div class="page-panel">
+            <header class="form-header">
+              <h1>GPS MUSCAT</h1>
+              <p>Sales Report</p>
+            </header>
 
-            <div class="form-group">
-              <label for="saleDateTime">Date and Time</label>
-              <input
-                type="datetime-local"
-                id="saleDateTime"
-                name="saleDateTime"
-              />
-            </div>
-          </section>
+            <section class="report-card">
+              <div class="report-card__header">
+                <div
+                  class="sales-report-date-nav"
+                  aria-label="Sales report date navigation"
+                >
+                  <button
+                    type="button"
+                    class="date-nav-btn"
+                    id="salesReportPrevDateBtn"
+                    aria-label="Previous date"
+                  >
+                    &lt;
+                  </button>
 
-          <!-- ===============================================================
-               SALE OPTIONS
-               VAT and payment status flags for the current sale.
-               =============================================================== -->
-          <fieldset class="form-group">
-            <legend>Sale Options</legend>
+                  <div class="sales-report-date-picker-wrap">
+                    <input
+                      type="date"
+                      id="salesReportDate"
+                      class="sales-report-date-input"
+                      aria-label="Select sales report date"
+                    />
+                  </div>
 
-            <div class="checkbox-row">
-              <label class="checkbox-group" for="vat">
-                <input type="checkbox" id="vat" name="vat" />
-                <span>VAT 5%</span>
-              </label>
+                  <button
+                    type="button"
+                    class="date-nav-btn"
+                    id="salesReportNextDateBtn"
+                    aria-label="Next date"
+                  >
+                    &gt;
+                  </button>
+                </div>
 
-              <label class="checkbox-group" for="paid">
-                <input type="checkbox" id="paid" name="paid" />
-                <span>Paid</span>
-              </label>
-            </div>
-          </fieldset>
+                <div class="report-card__controls">
+                  <input
+                    type="search"
+                    id="salesReportSearch"
+                    class="inventory-report-search"
+                    placeholder="Search sales..."
+                    aria-label="Search sales report"
+                    autocomplete="off"
+                  />
 
-          <!-- ===============================================================
-               FORM ACTIONS
-               Save and reset controls for the sales form.
-               =============================================================== -->
-          <div class="form-actions">
-            <button type="submit" class="primary-btn form-actions__save">
-              Save Sales Record
-            </button>
-            <button type="button" id="clearFormBtn" class="clear-btn">
-              Clear
-            </button>
+                  <button
+                    type="button"
+                    class="primary-btn inventory-refresh-btn"
+                    id="refreshSalesReportBtn"
+                  >
+                    Refresh
+                  </button>
+                </div>
+              </div>
+
+              <div class="inventory-report-status" id="salesReportStatus">
+                Loading sales...
+              </div>
+
+              <div class="table-wrap">
+                <table class="inventory-report-table sales-report-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Time</th>
+                      <th scope="col">Customer Name</th>
+                      <th scope="col">Item Name</th>
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Line Total</th>
+                      <th scope="col">Total</th>
+                      <th scope="col">VAT</th>
+                      <th scope="col">Paid</th>
+                    </tr>
+                  </thead>
+                  <tbody id="salesReportTableBody">
+                    <tr>
+                      <td colspan="8">Loading sales...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
           </div>
+        </section>
 
-          <!-- Autocomplete source for item inputs -->
-          <datalist id="inventoryItemsList"></datalist>
-        </form>
+        <section class="app-view" id="inventory-report-view" hidden>
+          <div class="page-panel">
+            <header class="form-header">
+              <h1>GPS MUSCAT</h1>
+              <p>Inventory Report</p>
+            </header>
+
+            <section class="report-card">
+              <div class="report-card__header">
+                <h2>Current Inventory</h2>
+
+                <div class="report-card__controls">
+                  <input
+                    type="search"
+                    id="inventoryReportSearch"
+                    class="inventory-report-search"
+                    placeholder="Search item..."
+                    aria-label="Search inventory items"
+                    autocomplete="off"
+                  />
+
+                  <button
+                    type="button"
+                    class="primary-btn inventory-refresh-btn"
+                    id="refreshInventoryReportBtn"
+                  >
+                    Refresh
+                  </button>
+                </div>
+              </div>
+
+              <div class="inventory-report-status" id="inventoryReportStatus">
+                Loading inventory...
+              </div>
+
+              <div class="table-wrap">
+                <table class="inventory-report-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Sr.NO</th>
+                      <th scope="col">Item Name</th>
+                      <th scope="col">Model</th>
+                      <th scope="col">Stock</th>
+                      <th scope="col">Remark</th>
+                    </tr>
+                  </thead>
+                  <tbody id="inventoryReportTableBody">
+                    <tr>
+                      <td colspan="5">Loading inventory...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </section>
       </main>
       <!-- End main content -->
     </div>
     <!-- End application shell -->
 
     <!-- JavaScript -->
-    <script src="./js/script.js" defer></script>
+    <script type="module" src="./js/app.js"></script>
   </body>
 </html>

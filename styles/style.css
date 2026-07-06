@@ -157,7 +157,16 @@ input {
   margin: 0;
 }
 
-.sales-form {
+.app-view[hidden] {
+  display: none;
+}
+
+.app-view {
+  width: 100%;
+}
+
+.sales-form,
+.page-panel {
   background: var(--color-surface-glass-strong);
   padding: var(--space-5);
   border: 1px solid var(--color-glass-border);
@@ -237,6 +246,13 @@ input {
   color: var(--color-primary);
 }
 
+.nav-button[aria-pressed="true"] {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary-soft-border);
+  color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-ring);
+}
+
 /* ==========================================================================
    FORM HEADER
    ========================================================================== */
@@ -304,7 +320,8 @@ fieldset.form-group legend,
 
 .form-group input[type="text"],
 .form-group input[type="number"],
-.form-group input[type="datetime-local"] {
+.form-group input[type="datetime-local"],
+.form-group textarea {
   width: 100%;
   min-height: var(--field-height);
   padding: 0 var(--space-4);
@@ -319,15 +336,74 @@ fieldset.form-group legend,
     background var(--transition-fast);
 }
 
+.input-with-clear {
+  position: relative;
+  width: 100%;
+}
+
+.item-autocomplete > .input-with-clear {
+  width: 100%;
+}
+
+.input-with-clear > input[type="text"],
+.input-with-clear > input[type="search"],
+.item-autocomplete .input-with-clear > .item-input {
+  padding-right: 2.75rem;
+}
+
+.input-clear-btn {
+  position: absolute;
+  top: 50%;
+  right: 0.7rem;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.input-clear-btn:hover {
+  background: var(--color-secondary-bg);
+  color: var(--color-text-strong);
+}
+
+.input-clear-btn[hidden] {
+  display: none;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+
+.form-group textarea {
+  min-height: 120px;
+  padding: var(--space-4);
+  resize: vertical;
+}
+
 .form-group input[type="text"]::placeholder,
 .form-group input[type="number"]::placeholder,
-.form-group input[type="datetime-local"]::placeholder {
+.form-group input[type="datetime-local"]::placeholder,
+.form-group textarea::placeholder {
   color: var(--color-text-muted);
 }
 
 .form-group input[type="text"]:focus,
 .form-group input[type="number"]:focus,
-.form-group input[type="datetime-local"]:focus {
+.form-group input[type="datetime-local"]:focus,
+.form-group textarea:focus {
   outline: none;
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px var(--color-primary-ring);
@@ -368,6 +444,85 @@ fieldset.form-group legend,
 .price-input {
   flex: 0.75;
   min-width: 0;
+}
+
+.item-autocomplete {
+  position: relative;
+  flex: 1.8;
+  min-width: 0;
+}
+
+.item-autocomplete .item-input {
+  width: 100%;
+}
+
+.item-suggestions {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  padding: var(--space-2);
+  background: var(--color-surface-glass-strong);
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-form);
+  -webkit-backdrop-filter: blur(var(--blur-glass));
+  backdrop-filter: blur(var(--blur-glass));
+}
+
+.item-suggestions[hidden] {
+  display: none;
+}
+
+.item-suggestion {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.85rem 1rem;
+  border: 0;
+  border-radius: calc(var(--radius-md) - 2px);
+  background: transparent;
+  color: var(--color-text-strong);
+  font-size: 0.97rem;
+  font-weight: 500;
+  text-align: left;
+  line-height: 1.35;
+  white-space: normal;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.item-suggestion + .item-suggestion {
+  margin-top: 2px;
+}
+
+.item-suggestion:hover {
+  background: var(--color-secondary-bg);
+  color: var(--color-text-strong);
+}
+
+.item-suggestion--active {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.item-suggestions::-webkit-scrollbar {
+  width: 8px;
+}
+
+.item-suggestions::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.55);
+  border-radius: 999px;
+}
+
+.item-suggestions::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 /* ==========================================================================
@@ -520,7 +675,8 @@ button {
 button:focus-visible,
 .form-group input[type="text"]:focus-visible,
 .form-group input[type="number"]:focus-visible,
-.form-group input[type="datetime-local"]:focus-visible {
+.form-group input[type="datetime-local"]:focus-visible,
+.form-group textarea:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
@@ -528,13 +684,312 @@ button:focus-visible,
 @supports not (
   (-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))
 ) {
-  .sales-form {
+  .sales-form,
+  .page-panel {
     background: rgba(255, 255, 255, 0.9);
   }
 
   .nav-panel__inner {
     background: rgba(255, 255, 255, 0.88);
   }
+}
+
+.report-card {
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 18px;
+  padding: 20px;
+}
+
+.report-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.report-card__header h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.sales-report-date-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+.date-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-strong);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.date-nav-btn:hover {
+  background: var(--color-secondary-bg);
+  border-color: var(--color-border-strong);
+}
+
+.sales-report-date-picker-wrap {
+  min-width: 0;
+  flex: 0 1 190px;
+}
+
+.sales-report-date-input {
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  padding: 0 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--color-text);
+  font-size: 0.95rem;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background var(--transition-fast);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.sales-report-date-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-ring);
+}
+
+.sales-report-table {
+  min-width: 1200px;
+}
+
+.report-card__controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.report-card__controls .input-with-clear {
+  width: 260px;
+  flex: 0 0 260px;
+}
+
+.inventory-report-search {
+  width: 100%;
+  min-width: 0;
+  min-height: var(--field-height);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--color-text);
+  font-size: 1rem;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background var(--transition-fast);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.inventory-report-search::placeholder {
+  color: var(--color-text-muted);
+}
+
+.inventory-report-search:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-ring);
+}
+
+.inventory-report-status {
+  margin-bottom: 12px;
+  color: #5b6475;
+  font-size: 0.92rem;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.inventory-report-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+.inventory-report-table th,
+.inventory-report-table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  font-size: 11px;
+}
+
+.inventory-report-table th {
+  background: rgba(248, 250, 252, 0.95);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.inventory-report-table tbody tr:hover {
+  background: rgba(15, 23, 42, 0.03);
+}
+
+.inventory-report-table tbody tr.inventory-report-row--out {
+  background: rgba(217, 75, 90, 0.08);
+}
+
+.inventory-report-table tbody tr.inventory-report-row--out:hover {
+  background: rgba(217, 75, 90, 0.14);
+}
+
+.sales-report-cell-main {
+  font-weight: 600;
+  color: var(--color-text-strong);
+}
+
+.sales-report-cell-sub {
+  margin-top: 2px;
+  font-size: 10px;
+  color: var(--color-text-muted);
+}
+
+.sales-report-paid-btn,
+.sales-report-refund-btn {
+  min-height: 36px;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text-strong);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.sales-report-paid-btn:hover,
+.sales-report-refund-btn:hover {
+  background: var(--color-secondary-bg);
+  border-color: var(--color-border-strong);
+}
+
+.sales-qty-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sales-qty-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  min-height: 32px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+  color: var(--color-text-strong);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.sales-qty-btn:hover {
+  background: var(--color-secondary-bg);
+  border-color: var(--color-border-strong);
+  color: var(--color-text-strong);
+}
+
+.sales-qty-btn:active {
+  transform: scale(0.97);
+}
+
+.sales-qty-btn:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-ring);
+}
+
+.sales-qty-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--color-secondary-bg);
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+  transform: none;
+}
+
+.sales-qty-value {
+  min-width: 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-strong);
+  text-align: left;
+}
+
+.sales-report-paid-btn--active {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary-soft-border);
+  color: var(--color-primary);
+}
+
+.sales-report-row--refunded {
+  opacity: 0.72;
+  background: rgba(217, 75, 90, 0.06);
+}
+
+.sales-report-refund-btn:disabled,
+.sales-report-paid-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.table-wrap--loading {
+  opacity: 0.6;
+  transition: opacity var(--transition-fast);
+}
+
+.inventory-refresh-btn:disabled {
+  opacity: 0.8;
+  cursor: wait;
+}
+
+.inventory-refresh-btn {
+  width: auto;
+  min-width: 120px;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0 var(--space-5);
 }
 
 /* ==========================================================================
@@ -575,14 +1030,33 @@ button:focus-visible,
   }
 }
 
+@media (min-width: 701px) {
+  :root {
+    --form-max-width: 900px;
+  }
+}
+
 @media (max-width: 700px) {
   body {
     padding: var(--space-3);
   }
 
   .sales-form,
+  .page-panel,
   .nav-panel__inner {
     padding: var(--space-4);
+  }
+
+  .app-shell,
+  .container,
+  .app-view,
+  .page-panel,
+  .report-card,
+  .report-card__header,
+  .report-card__controls {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .form-header {
@@ -605,8 +1079,12 @@ button:focus-visible,
     align-items: end;
   }
 
-  .item-input {
+  .item-autocomplete {
     grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .item-input {
     width: 100%;
   }
 
@@ -658,10 +1136,115 @@ button:focus-visible,
   .secondary-btn {
     padding: 0.95rem 1rem;
   }
+
+  .report-card {
+    margin-top: var(--space-4);
+    padding: var(--space-4);
+    overflow: hidden;
+  }
+
+  .report-card__header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+    min-width: 0;
+  }
+
+  .report-card__header h2 {
+    font-size: 1rem;
+    line-height: 1.35;
+    word-break: break-word;
+  }
+
+  .report-card__controls {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: var(--space-2);
+    width: 100%;
+    min-width: 0;
+  }
+
+  .sales-report-date-nav {
+    width: 100%;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+
+  .sales-report-date-picker-wrap {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .date-nav-btn {
+    width: 44px;
+    min-width: 44px;
+  }
+
+  .sales-report-date-input {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .sales-report-table {
+    width: max-content;
+    min-width: 1200px;
+  }
+
+  .report-card__controls .input-with-clear,
+  .inventory-report-search,
+  .inventory-refresh-btn {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    flex: 0 0 auto;
+    margin: 0;
+  }
+
+  .inventory-refresh-btn {
+    padding: 0 1rem;
+    align-self: stretch;
+  }
+
+  .table-wrap {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .inventory-report-table {
+    width: max-content;
+    min-width: 760px;
+  }
+
+  .form-header {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .form-header h1 {
+    font-size: 1.5rem;
+    line-height: 1.2;
+    word-break: break-word;
+  }
+
+  .form-header p {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    word-break: break-word;
+  }
 }
 
 @media (max-width: 480px) {
   .sales-form,
+  .page-panel,
   .nav-panel__inner {
     border-radius: var(--radius-md);
   }
