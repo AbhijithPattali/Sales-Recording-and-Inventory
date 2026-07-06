@@ -2,7 +2,7 @@
   "name": "GPS Muscat",
   "short_name": "GPS Muscat",
   "description": "GPS Sales Daily Sales Tracker",
-  "start_url": "./",
+  "start_url": "https://abhijithpattali.github.io/Sales-Recording-and-Inventory/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0b5cab",
