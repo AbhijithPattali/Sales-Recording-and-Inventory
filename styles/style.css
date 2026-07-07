@@ -608,6 +608,37 @@ button {
   margin: 0;
 }
 
+.primary-btn:disabled,
+.secondary-btn:disabled,
+.clear-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none;
+}
+
+.primary-btn:disabled {
+  background: var(--color-border-strong);
+  color: #ffffff;
+}
+
+.secondary-btn:disabled {
+  background: var(--color-secondary-bg);
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.clear-btn:disabled {
+  background: var(--color-danger-border-hover);
+  color: #ffffff;
+}
+
+.primary-btn:disabled:hover,
+.secondary-btn:disabled:hover,
+.clear-btn:disabled:hover {
+  background: inherit;
+}
+
 .clear-btn {
   flex: 0 0 auto;
   width: auto;
@@ -998,6 +1029,13 @@ button:focus-visible,
 /* On smaller screens, the sidebar should stack above the form instead of
    squeezing the content area. This keeps touch targets and form fields more
    comfortable to use. */
+
+@media (hover: hover) and (pointer: fine) {
+  body.is-submitting,
+  body.is-submitting * {
+    cursor: wait !important;
+  }
+}
 
 @media (max-width: 960px) {
   .app-shell {

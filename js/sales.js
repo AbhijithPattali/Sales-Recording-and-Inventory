@@ -560,6 +560,17 @@ function handleClearForm() {
 async function handleSalesSubmit(event) {
   event.preventDefault();
 
+  if (!dom.salesForm) {
+    return;
+  }
+
+  const submitButton = dom.salesForm.querySelector('button[type="submit"]');
+  const clearButton = dom.clearFormBtn;
+
+  if (submitButton?.disabled) {
+    return;
+  }
+
   const rows = dom.itemsContainer?.querySelectorAll(".item-row") || [];
 
   for (const row of rows) {
@@ -567,7 +578,7 @@ async function handleSalesSubmit(event) {
     validateRowDependencies(row);
   }
 
-  if (!dom.salesForm?.reportValidity()) {
+  if (!dom.salesForm.reportValidity()) {
     return;
   }
 
@@ -599,6 +610,7 @@ async function handleSalesSubmit(event) {
     action: "addSale",
     dateTime: dom.dateTimeInput?.value || "",
     customerName: dom.customerNameInput?.value.trim() || "",
+    subtotal: parseFloat(dom.subtotalPriceInput?.value || 0),
     total: parseFloat(dom.totalPriceInput?.value || 0),
     vat: Boolean(dom.vatCheckbox?.checked),
     paid: Boolean(dom.paidCheckbox?.checked),
@@ -606,6 +618,18 @@ async function handleSalesSubmit(event) {
   };
 
   try {
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Saving...";
+      submitButton.setAttribute("aria-disabled", "true");
+    }
+
+    if (clearButton) {
+      clearButton.disabled = true;
+    }
+
+    document.body.classList.add("is-submitting");
+
     const result = await postSale(payload);
 
     if (!result.success) {
@@ -613,15 +637,23 @@ async function handleSalesSubmit(event) {
     }
 
     showAlert("Sale saved successfully.");
-
-    await loadSalesReport({ showLoadingState: false, forceRefresh: true });
-    await loadInventoryReport({ showLoadingState: false, forceRefresh: true });
-
     clearSalesDraft();
     resetSalesForm();
   } catch (error) {
     console.error("Sale submit error:", error);
     showAlert(`Failed to save sale: ${error.message}`);
+  } finally {
+    document.body.classList.remove("is-submitting");
+
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.textContent = "Save Sales Record";
+      submitButton.removeAttribute("aria-disabled");
+    }
+
+    if (clearButton) {
+      clearButton.disabled = false;
+    }
   }
 }
 

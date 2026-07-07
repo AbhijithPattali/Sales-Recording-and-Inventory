@@ -365,8 +365,15 @@ async function handleInventorySubmit(event) {
     return;
   }
 
+  const submitButton = dom.inventoryForm.querySelector('button[type="submit"]');
+  const clearButton = dom.clearInventoryBtn;
+
+  if (submitButton?.disabled) {
+    return;
+  }
+
   const itemName = String(dom.inventoryItemNameInput?.value || "").trim();
-  const category = String(dom.inventoryCategoryInput?.value || "").trim();
+  const category = String(dom.inventoryModelInput?.value || "").trim();
   const quantityAdded = parseFloat(dom.inventoryQuantityAddedInput?.value || 0);
   const remark = String(dom.inventoryRemarkInput?.value || "").trim();
   const staffName = String(dom.inventoryStaffNameInput?.value || "").trim();
@@ -399,6 +406,18 @@ async function handleInventorySubmit(event) {
   };
 
   try {
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Saving...";
+      submitButton.setAttribute("aria-disabled", "true");
+    }
+
+    if (clearButton) {
+      clearButton.disabled = true;
+    }
+
+    document.body.classList.add("is-submitting");
+
     const result = await postInventory(payload);
 
     if (!result.success) {
@@ -407,10 +426,23 @@ async function handleInventorySubmit(event) {
 
     showAlert("Inventory saved successfully.");
     handleInventoryClear();
-    await loadInventorySuggestions({ forceRefresh: true });
+    await loadInventorySuggestions();
+    renderInventoryReportTable();
   } catch (error) {
     console.error("Inventory submit error:", error);
     showAlert(`Failed to save inventory: ${error.message}`);
+  } finally {
+    document.body.classList.remove("is-submitting");
+
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.textContent = "Save Inventory Record";
+      submitButton.removeAttribute("aria-disabled");
+    }
+
+    if (clearButton) {
+      clearButton.disabled = false;
+    }
   }
 }
 
