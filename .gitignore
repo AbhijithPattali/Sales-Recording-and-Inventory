@@ -1,0 +1,6 @@
+# VS Code workspace folder
+.vscode/
+
+# Generated export files from extensions
+*rasbuzz.ai-project-export-pro*.json
+*Fuzionix.file-tree-extractor*.json
